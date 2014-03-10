@@ -8,6 +8,12 @@
 	<dependencies>
 	
 		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.6</version>
+		</dependency>
+	
+		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>4.3.0.Final</version>
@@ -48,9 +54,9 @@
 						</component>
 					</components>
 					<componentProperties>
-						<persistenceunit>x-jpa</persistenceunit>
+						<persistenceunit>x-domain</persistenceunit>
 						<outputfilename>schema.ddl</outputfilename>
-						<drop>false</drop>
+						<drop>true</drop>
 						<create>true</create>
 						<export>false</export>
 						<format>true</format>

@@ -1,4 +1,4 @@
-package com.store.domain;
+package test.associations;
 
 import java.util.Set;
 
@@ -21,17 +21,10 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     
-    @Embedded
-    private ProductInfo info;
-    
-    @OneToOne
-    private Trademark trademark;
+    private String name;
     
     @OneToOne
     private Category category;
-    
-    @OneToMany
-    private Set<Shop> soldByShops;
     
     public Product() {
         // TODO Auto-generated constructor stub
