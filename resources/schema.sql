@@ -17,7 +17,7 @@ CREATE TABLE Customers
 	city   char(10), 
 	rating integer, 
 	snum   integer, 
-	FOREIGN KEY (snum) REFERENCES Salespeoples, 
+	FOREIGN KEY (snum) REFERENCES Salespeoples(snum), 
 	UNIQUE (cnum, snum)
 ); 
 

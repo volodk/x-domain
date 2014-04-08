@@ -18,6 +18,13 @@
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>4.3.0.Final</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.2</version>
+			<scope>test</scope>
+		</dependency>
 	
 	</dependencies>
 	
@@ -26,10 +33,7 @@
 		<testSourceDirectory>test</testSourceDirectory>
 		<resources>
 			<resource>
-				<directory>src</directory>
-				<!--excludes>
-					<exclude>**/*.java</exclude>
-				</excludes-->
+				<directory>resources</directory>
 			</resource>
 		</resources>
 		<plugins>
