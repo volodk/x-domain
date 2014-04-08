@@ -7,18 +7,21 @@ import javax.persistence.Persistence;
 public class Main {
 
     public static void main(String[] args) {
+        
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("x-domain");
         try {
             EntityManager em = emf.createEntityManager();
             try {
-                
-                
-                
+                queryDataAccessLayer(em);
             } finally {
                 em.close();
             }
         } finally {
             emf.close();
         }
+    }
+
+    private static void queryDataAccessLayer(EntityManager em) {
+        
     }
 }
