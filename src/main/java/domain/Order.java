@@ -7,9 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 // volodymyr_krasnikov1 <vkrasnikov@gmail.com> 5:14:23 PM 
@@ -20,7 +19,8 @@ public class Order {
 
     @Id
     @Column(name = "onum")
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "order_id_gen", sequenceName = "order_seq")
     private int id;
 
     @Column(name = "amt")
@@ -30,7 +30,6 @@ public class Order {
     private Date orderDate;
 
     @ManyToOne
-    @JoinColumns({ @JoinColumn(columnDefinition = "cnum"), @JoinColumn(columnDefinition = "snum") })
     private Customer customer;
 
     public Order() {
@@ -67,43 +66,6 @@ public class Order {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + Float.floatToIntBits(amount);
-        result = prime * result + ((customer == null) ? 0 : customer.hashCode());
-        result = prime * result + id;
-        result = prime * result + ((orderDate == null) ? 0 : orderDate.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Order other = (Order) obj;
-        if (Float.floatToIntBits(amount) != Float.floatToIntBits(other.amount))
-            return false;
-        if (customer == null) {
-            if (other.customer != null)
-                return false;
-        } else if (!customer.equals(other.customer))
-            return false;
-        if (id != other.id)
-            return false;
-        if (orderDate == null) {
-            if (other.orderDate != null)
-                return false;
-        } else if (!orderDate.equals(other.orderDate))
-            return false;
-        return true;
     }
     
 }

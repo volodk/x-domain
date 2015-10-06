@@ -1,13 +1,13 @@
 apply plugin: 'java'
+apply plugin: 'eclipse'
 
 version = '1.0'
 
-sourceCompatibility = 1.8
-
 dependencies {
 	
-	compile 'org.hibernate:hibernate-entitymanager:4.3.0.Final'
+	compile 'org.hibernate:hibernate-entitymanager:5.0.1.Final'
 	compile 'com.h2database:h2:1.4.182'
+	compile 'org.apache.commons:commons-lang3:3.4'
     
 	testCompile 'junit:junit:4.12+'	
 }
