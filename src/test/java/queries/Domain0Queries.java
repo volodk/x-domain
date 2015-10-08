@@ -1,11 +1,13 @@
-package domain;
+package queries;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
-public class JPATestSuite extends JPATest{
+import domain0.Customer;
+
+public class Domain0Queries extends BaseJPATest{
     
     @Test
     public void findCustomerById() throws Exception {

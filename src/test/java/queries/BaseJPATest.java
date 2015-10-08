@@ -1,4 +1,4 @@
-package domain;
+package queries;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -15,7 +15,7 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.rules.ExternalResource;
 
-public class JPATest {
+public class BaseJPATest {
     
     private static Server h2server;
     protected static EntityManagerFactory emf;
@@ -40,7 +40,7 @@ public class JPATest {
         @Override
         protected void before() throws Throwable {
             Connection conn = DriverManager.getConnection("jdbc:h2:mem:jpatestdb", "sa", "");
-            Reader schema = new InputStreamReader(JPATest.class.getResourceAsStream("/schema.sql"));
+            Reader schema = new InputStreamReader(BaseJPATest.class.getResourceAsStream("/schema.sql"));
             RunScript.execute(conn, schema);
         }
         protected void after() {
@@ -53,7 +53,7 @@ public class JPATest {
         @Override
         protected void before() throws Throwable {
             Connection conn = DriverManager.getConnection("jdbc:h2:mem:jpatestdb", "sa", "");
-            Reader data = new InputStreamReader(JPATest.class.getResourceAsStream("/data.sql"));
+            Reader data = new InputStreamReader(BaseJPATest.class.getResourceAsStream("/data.sql"));
             RunScript.execute(conn, data);
         }
         protected void after() {

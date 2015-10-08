@@ -4,6 +4,7 @@ import java.util.Set;
 
 public class Professor {
 	
-	Set<Lecture> lectures;
+    private int id;
+	private Set<Lecture> lectures;
 
 }
