@@ -1,15 +1,9 @@
-package queries;
-
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.sql.Connection;
-import java.sql.DriverManager;
+package base;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-import org.h2.tools.RunScript;
 import org.h2.tools.Server;
 import org.junit.ClassRule;
 import org.junit.Rule;
@@ -32,32 +26,6 @@ public class BaseJPATest {
         protected void after() {
             h2server.stop();
             System.out.println("<<<<< H2 stopped");
-        };
-    };
-    
-    @ClassRule
-    public static ExternalResource schema = new ExternalResource() {
-        @Override
-        protected void before() throws Throwable {
-            Connection conn = DriverManager.getConnection("jdbc:h2:mem:jpatestdb", "sa", "");
-            Reader schema = new InputStreamReader(BaseJPATest.class.getResourceAsStream("/schema.sql"));
-            RunScript.execute(conn, schema);
-        }
-        protected void after() {
-            // do nothing
-        };
-    };
-    
-    @ClassRule
-    public static ExternalResource data = new ExternalResource() {
-        @Override
-        protected void before() throws Throwable {
-            Connection conn = DriverManager.getConnection("jdbc:h2:mem:jpatestdb", "sa", "");
-            Reader data = new InputStreamReader(BaseJPATest.class.getResourceAsStream("/data.sql"));
-            RunScript.execute(conn, data);
-        }
-        protected void after() {
-            // do nothing
         };
     };
     
