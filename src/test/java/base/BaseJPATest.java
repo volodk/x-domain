@@ -21,11 +21,9 @@ public class BaseJPATest {
         protected void before() throws Throwable {
             String[] args = { "-trace" };
             h2server = Server.createTcpServer(args).start();
-            System.out.println("H2 started >>>>> ");
         }
         protected void after() {
             h2server.stop();
-            System.out.println("<<<<< H2 stopped");
         };
     };
     

@@ -1,9 +1,15 @@
 package domain0;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.List;
+
+import javax.persistence.TypedQuery;
 
 import org.h2.tools.RunScript;
 import org.junit.ClassRule;
@@ -13,7 +19,7 @@ import org.junit.rules.ExternalResource;
 import base.BaseJPATest;
 
 public class Queries extends BaseJPATest {
-    
+
     @ClassRule
     public static ExternalResource schema = new ExternalResource() {
         @Override
@@ -24,21 +30,33 @@ public class Queries extends BaseJPATest {
             RunScript.execute(conn, schema);
             RunScript.execute(conn, data);
         }
-        protected void after() {};
+
+        protected void after() {
+        };
     };
 
     // (*) 1. Напишите команду SELECT которая бы вывела номер порядка, сумму, и
     // дату для всех строк из таблицы Порядков.
     @Test
-    public void query1() throws Exception {
-
+    public void selectOrder_Id_sum_date() throws Exception {
+        TypedQuery<Order> q = em.createQuery("select o from Order o", Order.class);
+        List<Order> results = q.getResultList();
+        assertNotNull(results);
+        assertEquals(10, results.size());
+        results.forEach(o -> System.out.format("id: %d \t sum: %f \t date: %s\n", o.getId(), o.getAmount(),
+                o.getOrderDate()));
     }
 
     // (*) 2. Напишите запрос который вывел бы все строки из таблицы Заказчиков
     // для которых номер продавца = 1001.
     @Test
-    public void query2() throws Exception {
-
+    public void selectCustomer_where_snum_eq_1001() throws Exception {
+        TypedQuery<Customer> q = em.createQuery("select c from Customer c where c.salepeople.id = :snum", Customer.class);
+        q.setParameter("snum", 1001);
+        List<Customer> results = q.getResultList();
+        assertNotNull(results);
+        assertEquals(2, results.size());
+        results.forEach(c -> System.out.format("id: %d \t name: %s\n", c.getId(), c.getName()));
     }
 
     // (*) 3 Напишите запрос который вывел бы таблицу со столбцами в следующем

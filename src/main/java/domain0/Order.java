@@ -4,11 +4,9 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 // volodymyr_krasnikov1 <vkrasnikov@gmail.com> 5:14:23 PM 
@@ -19,8 +17,6 @@ public class Order {
 
     @Id
     @Column(name = "onum")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "order_id_gen", sequenceName = "order_seq")
     private int id;
 
     @Column(name = "amt")
@@ -30,7 +26,12 @@ public class Order {
     private Date orderDate;
 
     @ManyToOne
+    @JoinColumn(name = "cnum")
     private Customer customer;
+    
+    @ManyToOne
+    @JoinColumn(name = "snum")
+    private Salespeople sales;
 
     public Order() {
         // TODO Auto-generated constructor stub
@@ -66,6 +67,14 @@ public class Order {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+    
+    public Salespeople getSales() {
+        return sales;
+    }
+    
+    public void setSales(Salespeople sales) {
+        this.sales = sales;
     }
     
 }

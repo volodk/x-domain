@@ -1,7 +1,3 @@
-CREATE SEQUENCE	salespeople_seq START WITH 1006;
-CREATE SEQUENCE	customer_seq START WITH 2008;
-CREATE SEQUENCE	order_seq START WITH 3012;
-
 CREATE TABLE Salespeoples
 (
 	snum  integer NOT NULL PRIMARY KEY, 

@@ -1,11 +1,11 @@
 package domain0;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 // volodymyr_krasnikov1 <vkrasnikov@gmail.com> 5:13:51 PM 
@@ -16,8 +16,6 @@ public class Salespeople {
     
     @Id
     @Column( name = "snum" )
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "salespeople_id_gen", sequenceName = "salespeople_seq")
     private int id;
     
     @Column(name = "sname", nullable = false)
@@ -28,6 +26,9 @@ public class Salespeople {
     
     @Column( name = "comm" )
     private float commision;
+    
+    @OneToMany(mappedBy = "salepeople")
+    private List<Customer> customers;
     
     public Salespeople() {
     }

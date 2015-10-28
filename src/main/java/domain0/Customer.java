@@ -2,12 +2,9 @@ package domain0;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -17,8 +14,6 @@ public class Customer {
     
     @Id
     @Column( name = "cnum" )
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "customer_id_gen", sequenceName = "customer_seq")
     private int id;
     
     @Column(name = "cname", nullable = false)
