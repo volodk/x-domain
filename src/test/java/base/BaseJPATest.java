@@ -48,5 +48,16 @@ public class BaseJPATest {
             em.close();
         };
     };
+    
+    @Rule
+    public ExternalResource whitespace = new ExternalResource() {
+        @Override
+        protected void before() throws Throwable {
+            System.out.println(">>>");
+        }
+        protected void after() {
+            System.out.println("<<<");
+        };
+    };
 
 }

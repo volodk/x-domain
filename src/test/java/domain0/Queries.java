@@ -62,22 +62,28 @@ public class Queries extends BaseJPATest {
     // (*) 3 Напишите запрос который вывел бы таблицу со столбцами в следующем
     // порядке: city, sname, snum, comm.
     @Test
-    public void query3() throws Exception {
-
+    public void selectSalespeople() throws Exception {
+        TypedQuery<Salespeople> q = em.createQuery("select s from Salespeople s", Salespeople.class);
+        List<Salespeople> result = q.getResultList();
+        assertEquals(5, result.size());
     }
 
     // (*) 4. Напишите команду SELECT которая вывела бы оценку(rating),
     // сопровождаемую именем каждого заказчика в San Jose.
     @Test
     public void query4() throws Exception {
-
+        TypedQuery<Customer> q = em.createQuery("select c from Customer c where c.city = :city", Customer.class);
+        q.setParameter("city", "SanJose");
+        List<Customer> resultList = q.getResultList();
+        assertEquals(2, resultList.size());
+        resultList.forEach( c -> System.out.format("rating: %d \t name: %s\n", c.getRating(), c.getName() ) );
     }
 
     // (*) 5. Напишите запрос который вывел бы значения snum всех продавцов в
     // текущем порядке из таблицы Порядков без каких бы то ни было повторений.
     @Test
     public void query5() throws Exception {
-
+        TypedQuery<Order> q = em.createQuery("select o from Order o", Order.class);
     }
 
     // (*) 1. Напишите запрос который может дать вам все порядки со значениями
