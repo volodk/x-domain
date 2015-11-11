@@ -10,6 +10,9 @@ import java.sql.DriverManager;
 import java.util.List;
 
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import org.h2.tools.RunScript;
 import org.junit.ClassRule;
@@ -45,6 +48,15 @@ public class Queries extends BaseJPATest {
         assertEquals(10, results.size());
         results.forEach(o -> System.out.format("id: %d \t sum: %f \t date: %s\n", o.getId(), o.getAmount(),
                 o.getOrderDate()));
+        
+        // with criteria querys
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Order> cq = cb.createQuery(Order.class);
+        Root<Order> orders = cq.from(Order.class);
+        cq.select(orders);
+        
+        List<Order> results2 = em.createQuery(cq).getResultList();
+        assertEquals(10, results2.size());
     }
 
     // (*) 2. Напишите запрос который вывел бы все строки из таблицы Заказчиков
