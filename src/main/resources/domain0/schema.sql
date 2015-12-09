@@ -21,7 +21,7 @@ CREATE TABLE Orders
 (
 	onum  integer NOT NULL PRIMARY KEY, 
 	amt   float, 
-	odate date NOT NULL,
+	odate timestamp NOT NULL,
 	cnum  integer NOT NULL,
 	snum  integer NOT NULL, 
 	FOREIGN KEY (cnum, snum) REFERENCES CUSTOMERS (cnum, snum)

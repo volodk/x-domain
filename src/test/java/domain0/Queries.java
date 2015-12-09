@@ -7,8 +7,11 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.Calendar;
 import java.util.List;
 
+import javax.persistence.TemporalType;
+import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -49,6 +52,11 @@ public class Queries extends BaseJPATest {
         results.forEach(o -> System.out.format("id: %d \t sum: %f \t date: %s\n", o.getId(), o.getAmount(),
                 o.getOrderDate()));
         
+        System.out.println();
+        TypedQuery<Tuple> qe = em.createQuery("select o.amount, o.orderDate from Order o", Tuple.class);
+        List<Tuple> results1 = qe.getResultList();
+        assertEquals(10, results1.size());
+        
         // with criteria querys
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Order> cq = cb.createQuery(Order.class);
@@ -57,6 +65,16 @@ public class Queries extends BaseJPATest {
         
         List<Order> results2 = em.createQuery(cq).getResultList();
         assertEquals(10, results2.size());
+        
+        
+        CriteriaBuilder cb2 = em.getCriteriaBuilder();
+        CriteriaQuery<Tuple> cq2 = cb2.createQuery(Tuple.class);
+        Root<Order> orders2 = cq2.from(Order.class);
+        cq2.select(cb2.tuple(orders2.get("amount"), orders2.get("orderDate")));
+        
+        List<Tuple> results3 = em.createQuery(cq2).getResultList();
+        assertEquals(10, results3.size());
+        results3.forEach( t -> System.out.println(t.get(0) + "\t" + t.get(1)) );
     }
 
     // (*) 2. Напишите запрос который вывел бы все строки из таблицы Заказчиков
@@ -69,6 +87,15 @@ public class Queries extends BaseJPATest {
         assertNotNull(results);
         assertEquals(2, results.size());
         results.forEach(c -> System.out.format("id: %d \t name: %s\n", c.getId(), c.getName()));
+        
+        
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Customer> cq = cb.createQuery(Customer.class);
+        Root<Customer> customers = cq.from(Customer.class);
+        cq.select(customers).where(cb.equal(customers.get("salepeople"), 1001));
+        
+        List<Customer> results2 = em.createQuery(cq).getResultList();
+        assertEquals(2, results2.size());
     }
 
     // (*) 3 Напишите запрос который вывел бы таблицу со столбцами в следующем
@@ -95,7 +122,19 @@ public class Queries extends BaseJPATest {
     // текущем порядке из таблицы Порядков без каких бы то ни было повторений.
     @Test
     public void query5() throws Exception {
-        TypedQuery<Order> q = em.createQuery("select o from Order o", Order.class);
+        TypedQuery<Integer> q = em.createQuery("select distinct o.sales.id from Order o", Integer.class);
+        List<Integer> ans = q.getResultList();
+        assertEquals(5, ans.size());
+        
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Integer> cq = cb.createQuery(Integer.class);
+        Root<Order> root = cq.from(Order.class);
+        cq.select(root.get("sales"));
+        cq.distinct(true);
+        
+        List<Integer> ans2 = em.createQuery(cq).getResultList();
+        assertEquals(5, ans2.size());
+        
     }
 
     // (*) 1. Напишите запрос который может дать вам все порядки со значениями
@@ -159,6 +198,15 @@ public class Queries extends BaseJPATest {
     // Октября.
     @Test
     public void query14() throws Exception {
+        
+        Calendar c = Calendar.getInstance();
+        c.set(1990, Calendar.OCTOBER, 3, 0, 0, 0);
+        
+        TypedQuery<Long> q = em.createQuery("select count(o.amount) from Order o where o.orderDate = :date", Long.class);
+        q.setParameter("date", c.getTime(), TemporalType.TIMESTAMP);
+        
+        Long value = q.getSingleResult();
+        System.out.println(value);
 
     }
 

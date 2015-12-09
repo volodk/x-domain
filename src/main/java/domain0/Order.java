@@ -4,10 +4,13 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 // volodymyr_krasnikov1 <vkrasnikov@gmail.com> 5:14:23 PM 
 
@@ -23,13 +26,14 @@ public class Order {
     private float amount;
 
     @Column(name = "odate", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date orderDate;
 
     @ManyToOne
     @JoinColumn(name = "cnum")
     private Customer customer;
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "snum")
     private Salespeople sales;
 
