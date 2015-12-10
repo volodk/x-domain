@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.List;
 
@@ -105,6 +106,14 @@ public class Queries extends BaseJPATest {
         TypedQuery<Salespeople> q = em.createQuery("select s from Salespeople s", Salespeople.class);
         List<Salespeople> result = q.getResultList();
         assertEquals(5, result.size());
+        
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Tuple> cq = cb.createTupleQuery();
+        Root<Salespeople> sales = cq.from(Salespeople.class);
+        cq.select(cb.tuple(sales.get("city"), sales.get("name"), sales.get("id"), sales.get("commision")));
+        
+        em.createQuery(cq).getResultList()
+            .forEach(t -> System.out.format("city: %s \n", t.get(0)));
     }
 
     // (*) 4. Напишите команду SELECT которая вывела бы оценку(rating),
@@ -141,28 +150,66 @@ public class Queries extends BaseJPATest {
     // суммы выше чем $1,000.
     @Test
     public void query6() throws Exception {
-
+        
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Order> cq = cb.createQuery(Order.class);
+        Root<Order> orders = cq.from(Order.class);
+        cq.where(cb.gt(orders.get("amount"), 1000));
+        
+        List<Order> results = em.createQuery(cq).getResultList();
+        assertEquals(7, results.size());
     }
 
-    // (*) 2. Напишите запрос который может выдать вам пол sname и city для всех
+    // (*) 2. Напишите запрос который может выдать вам полe sname и city для всех
     // продавцов в Лондоне с комиссионными выше .10 .
     @Test
     public void query7() throws Exception {
-
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Tuple> cq = cb.createTupleQuery();
+        Root<Salespeople> sales = cq.from(Salespeople.class);
+        cq.select(cb.tuple(sales.get("name"), sales.get("city")))
+        .where(cb.and (
+                    cb.equal(sales.get("city"), "London"),
+                    cb.gt(sales.get("commision"), 0.10)
+                )
+            );
+        
+        List<Tuple> results = em.createQuery(cq).getResultList();
+        assertEquals(2, results.size());
     }
 
     // (*) 3. Напишите запрос к таблице Заказчиков чей вывод может включить всех
     // заказчиков с оценкой =< 100, если они не находятся в Риме.
     @Test
     public void query8() throws Exception {
-
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Customer> cq = cb.createQuery(Customer.class);
+        Root<Customer> customers = cq.from(Customer.class);
+        cq.where(cb.and(cb.le(customers.get("rating"), 100), cb.notEqual(customers.get("city"), "Rome")));
+        
+        List<Customer> results = em.createQuery(cq).getResultList();
+        assertEquals(2, results.size());
     }
 
     // (*)1. Напишите два запроса которые могли бы вывести все порядки на 3 или
     // 4 Октября 1990
     @Test
     public void query9() throws Exception {
-
+        
+        Calendar c1 = Calendar.getInstance();
+        c1.set(1990, Calendar.OCTOBER, 3, 0, 0, 0);
+        
+        Calendar c2 = Calendar.getInstance();
+        c2.set(1990, Calendar.OCTOBER, 4, 0, 0, 0);
+        
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Order> cq = cb.createQuery(Order.class);
+        Root<Order> orders = cq.from(Order.class);
+        cq.where(cb.or(cb.equal(orders.<Timestamp>get("orderDate"), c1.getTime()), cb.equal(orders.<Timestamp>get("orderDate"), c2.getTime())));
+        
+        
+        List<Order> results = em.createQuery(cq).getResultList();
+        assertEquals(5, results.size());
     }
 
     // (*) 2. Напишите запрос который выберет всех заказчиков обслуживаемых
